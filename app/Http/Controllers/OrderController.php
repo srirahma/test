@@ -28,25 +28,30 @@ class OrderController extends Controller
             $qty = $req->qty;
             $nominal_masuk = $req->nominal_masuk;
 
+            //cek pecahan yang diterima
             if($nominal_masuk != 2000 && $nominal_masuk != 5000 && $nominal_masuk != 10000 && $nominal_masuk != 20000 && $nominal_masuk != 50000){
                 return response()->json(['success'=>false, 'massage' => 'Pecahan tidak sesuai']);
             }
 
-            
             if($nominal_masuk){
+                //cek product bedasarkan request customer
                 $check_product = Product::where('nama', $product)->where('stok', '!=' ,0)->first();
 
                 if($check_product){
+                    //cek stok jika kosong
                     if($qty > $check_product->stok){
                         return response()->json(['success'=>false, 'massage' => 'Stok tidak cukup']);
                     }
 
+                    //cek nominal dan jumlah qty order
                     if($nominal_masuk >= ($check_product->harga * $qty) ){
+                        //update stok
                         $check_product->stok -= $qty;
                         $check_product->save();
 
+                        //sisa uang
                         $uang_kembali = $nominal_masuk - ($check_product->harga * $qty);
-                        return response()->json(['success'=>true, 'massage' => 'Transaksi berhasil', 'data' => $uang_kembali]);
+                        return response()->json(['success'=>true, 'massage' => 'Transaksi berhasil', 'uang_kembali' => $uang_kembali]);
                     }else{
                         return response()->json(['success'=>false, 'massage' => 'Uang tidak cukup']);
                     }
