@@ -12,7 +12,7 @@ class OrderController extends Controller
         try {
 
             $get_data = Product::orderBy('id', 'ASC')->get();
-            return $get_data;
+            return view('index', compact('get_data'));
 
         }catch (\Exception $e) {
             DB::rollback();

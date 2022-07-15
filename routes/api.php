@@ -19,5 +19,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/data-makanan', [OrderController::class, 'get_data']);
-Route::post('/proses-order', [OrderController::class, 'proses_order']);
+// Route::get('/data-makanan', [OrderController::class, 'get_data']);
+// Route::post('/proses-order', [OrderController::class, 'proses_order']);
